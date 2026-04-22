@@ -223,6 +223,67 @@ int main() {
     return 0;
 }</pre>
 </div>
+<div class="code-block">
+  <div class="header">
+    <span class="title">CPU Scheduling - SRTF (C)</span>
+    <button onclick="copyCode(this)">Copy</button>
+  </div>
+  <pre>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int n, i, t = 0, min, p;
+    int at[10], bt[10], rt[10], wt[10], tat[10], done = 0;
+
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+
+    printf("Enter Arrival Time and Burst Time:\n");
+    for(i = 0; i < n; i++)
+    {
+        scanf("%d %d", &at[i], &bt[i]);
+        rt[i] = bt[i];
+    }
+
+    while(done < n)
+    {
+        min = 9999;
+        p = -1;
+
+        for(i = 0; i < n; i++)
+        {
+            if(at[i] <= t && rt[i] > 0 && rt[i] < min)
+            {
+                min = rt[i];
+                p = i;
+            }
+        }
+
+        if(p == -1)
+        {
+            t++;
+            continue;
+        }
+
+        rt[p]--;
+
+        if(rt[p] == 0)
+        {
+            done++;
+            tat[p] = t + 1 - at[p];
+            wt[p] = tat[p] - bt[p];
+        }
+
+        t++;
+    }
+
+    printf("\nP\tWT\tTAT\n");
+    for(i = 0; i < n; i++)
+        printf("P%d\t%d\t%d\n", i+1, wt[i], tat[i]);
+
+    return 0;
+}</pre>
+</div
 
 </div>
 
