@@ -103,6 +103,66 @@ function addTask(){
 &lt;/script&gt;</pre>
 </div>
 
+<!-- 1b To-Do List Part 2 (localStorage) -->
+<div class="code-block">
+<div class="header">To-Do List Part 2 (localStorage) <button onclick="copyCode(this)">Copy</button></div>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;To-Do List&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h3&gt;My Day&lt;/h3&gt;
+&lt;input type="text" id="in" placeholder="Enter task"&gt;
+&lt;button onclick="add()"&gt;Add&lt;/button&gt;
+&lt;ul id="list"&gt;&lt;/ul&gt;
+&lt;button onclick="clearAll()"&gt;Clear All&lt;/button&gt;
+&lt;script&gt;
+  let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+  function add() {
+    let val = document.getElementById("in").value;
+    if (!val.trim()) return;
+
+    tasks.unshift({ id: Date.now(), text: val, done: false });
+    render();
+  }
+  function toggle(id) {
+    tasks = tasks.map(t =&gt;
+      t.id === id ? { ...t, done: !t.done } : t
+    );
+    render();
+  }
+  function del(id) {
+    tasks = tasks.filter(t =&gt; t.id !== id);
+    render();
+  }
+  function clearAll() {
+    tasks = [];
+    render();
+  }
+  function render() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+    let list = document.getElementById("list");
+    list.innerHTML = "";
+    tasks.forEach(t =&gt; {
+      let li = document.createElement("li");
+      li.innerHTML = `
+        &lt;span onclick="toggle(${t.id})"
+              style="${t.done ? 'text-decoration:line-through' : ''}"&gt;
+          ${t.text}
+        &lt;/span&gt;
+        &lt;button onclick="del(${t.id})"&gt;X&lt;/button&gt;
+      `;
+      list.appendChild(li);
+    });
+    document.getElementById("in").value = "";
+  }
+  render();
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+</div>
+
 <!-- 2 DOM Update -->
 <div class="code-block">
 <div class="header">DOM Update <button onclick="copyCode(this)">Copy</button></div>
