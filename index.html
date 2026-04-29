@@ -16,9 +16,9 @@ button{background:#238636;color:white;border:none;padding:5px 10px;border-radius
 </head>
 <body>
 
-<!-- 1 To-Do List -->
+<!-- Q1 To-Do List -->
 <div class="code-block">
-<div class="header">To-Do List <button onclick="copyCode(this)">Copy</button></div>
+<div class="header">Q1 &mdash; To-Do List (JS &amp; DOM) <button onclick="copyCode(this)">Copy</button></div>
 <pre>&lt;style&gt;
 body{
     font-family: Arial, sans-serif;
@@ -103,9 +103,9 @@ function addTask(){
 &lt;/script&gt;</pre>
 </div>
 
-<!-- 1b To-Do List Part 2 (localStorage) -->
+<!-- Q2 To-Do List Part 2 (localStorage) -->
 <div class="code-block">
-<div class="header">To-Do List Part 2 (localStorage) <button onclick="copyCode(this)">Copy</button></div>
+<div class="header">Q2 &mdash; To-Do List Part 2 (localStorage) <button onclick="copyCode(this)">Copy</button></div>
 <pre>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
@@ -163,9 +163,9 @@ function addTask(){
 &lt;/html&gt;</pre>
 </div>
 
-<!-- 2 DOM Update -->
+<!-- Q3 DOM Update -->
 <div class="code-block">
-<div class="header">DOM Update <button onclick="copyCode(this)">Copy</button></div>
+<div class="header">Q3 &mdash; DOM Update on Button Click <button onclick="copyCode(this)">Copy</button></div>
 <pre>&lt;p id="text"&gt;Hello&lt;/p&gt;
 &lt;button onclick="change()"&gt;Click&lt;/button&gt;
 &lt;script&gt;
@@ -175,9 +175,9 @@ function change(){
 &lt;/script&gt;</pre>
 </div>
 
-<!-- 3 jQuery -->
+<!-- Q4 jQuery -->
 <div class="code-block">
-<div class="header">jQuery Effects <button onclick="copyCode(this)">Copy</button></div>
+<div class="header">Q4 &mdash; jQuery Effects <button onclick="copyCode(this)">Copy</button></div>
 <pre>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
@@ -239,13 +239,17 @@ $(document).ready(function(){
 &lt;/html&gt;</pre>
 </div>
 
-<!-- 4 React -->
+<!-- Q8 React -->
 <div class="code-block">
-<div class="header">React Counter (Hooks) <button onclick="copyCode(this)">Copy</button></div>
-<pre>import React, { useState } from "react";
+<div class="header">Q8 &mdash; React Counter (useState + useEffect) <button onclick="copyCode(this)">Copy</button></div>
+<pre>import React, { useState, useEffect } from "react";
 
 function Counter() {
     const [count, setCount] = useState(0);
+
+    useEffect(() =&gt; {
+        document.title = `Count: ${count}`;
+    }, [count]);
 
     return (
         &lt;div style={{textAlign:"center", marginTop:"40px"}}&gt;
@@ -260,6 +264,268 @@ function Counter() {
 }
 
 export default Counter;</pre>
+</div>
+
+<!-- Q5 Weather AJAX -->
+<div class="code-block">
+<div class="header">Q5 &mdash; Weather App (AJAX + API) <button onclick="copyCode(this)">Copy</button></div>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Weather App&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h2&gt;Weather App&lt;/h2&gt;
+&lt;input type="text" id="city" placeholder="Enter city"&gt;
+&lt;button onclick="getWeather()"&gt;Get Weather&lt;/button&gt;
+&lt;div id="result"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+const API_KEY = "your_api_key_here";
+
+function getWeather() {
+  let city = document.getElementById("city").value.trim();
+  if (!city) return;
+
+  let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
+
+  fetch(url)
+    .then(res =&gt; res.json())
+    .then(data =&gt; {
+      if (data.cod !== 200) {
+        document.getElementById("result").innerHTML = "&lt;p&gt;City not found.&lt;/p&gt;";
+        return;
+      }
+      document.getElementById("result").innerHTML = `
+        &lt;h3&gt;${data.name}, ${data.sys.country}&lt;/h3&gt;
+        &lt;p&gt;Temperature: ${data.main.temp} &deg;C&lt;/p&gt;
+        &lt;p&gt;Humidity: ${data.main.humidity}%&lt;/p&gt;
+        &lt;p&gt;Condition: ${data.weather[0].description}&lt;/p&gt;
+      `;
+    })
+    .catch(err =&gt; {
+      document.getElementById("result").innerHTML = "&lt;p&gt;Error fetching data.&lt;/p&gt;";
+    });
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+</div>
+
+<!-- Q6 PHP MySQL CRUD -->
+<div class="code-block">
+<div class="header">Q6 &mdash; PHP MySQL CRUD + Session &amp; Cookies <button onclick="copyCode(this)">Copy</button></div>
+<pre>&lt;!-- FILE: db.php --&gt;
+&lt;?php
+$conn = mysqli_connect("localhost", "root", "", "userdb");
+if (!$conn) die("Connection failed: " . mysqli_connect_error());
+?&gt;
+
+&lt;!-- FILE: index.php --&gt;
+&lt;?php
+session_start();
+include 'db.php';
+
+// Set a cookie
+setcookie("visited", "yes", time() + 86400);
+
+// Create
+if (isset($_POST['add'])) {
+    $name = mysqli_real_escape_string($conn, $_POST['name']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    if ($name && $email) {
+        mysqli_query($conn, "INSERT INTO users (name, email) VALUES ('$name', '$email')");
+        $_SESSION['msg'] = "User added!";
+    }
+}
+
+// Delete
+if (isset($_GET['delete'])) {
+    $id = (int)$_GET['delete'];
+    mysqli_query($conn, "DELETE FROM users WHERE id=$id");
+    $_SESSION['msg'] = "User deleted!";
+}
+
+// Update
+if (isset($_POST['update'])) {
+    $id = (int)$_POST['id'];
+    $name = mysqli_real_escape_string($conn, $_POST['name']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    mysqli_query($conn, "UPDATE users SET name='$name', email='$email' WHERE id=$id");
+    $_SESSION['msg'] = "User updated!";
+}
+
+// Read
+$result = mysqli_query($conn, "SELECT * FROM users");
+?&gt;
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;CRUD&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;h2&gt;User Management&lt;/h2&gt;
+
+&lt;?php if(isset($_SESSION['msg'])){ echo "&lt;p&gt;".$_SESSION['msg']."&lt;/p&gt;"; unset($_SESSION['msg']); } ?&gt;
+&lt;?php if(isset($_COOKIE['visited'])){ echo "&lt;p&gt;Welcome back!&lt;/p&gt;"; } ?&gt;
+
+&lt;!-- Add Form --&gt;
+&lt;form method="POST"&gt;
+  Name: &lt;input type="text" name="name" required&gt;
+  Email: &lt;input type="email" name="email" required&gt;
+  &lt;button type="submit" name="add"&gt;Add User&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;!-- Read Table --&gt;
+&lt;table border="1"&gt;
+&lt;tr&gt;&lt;th&gt;ID&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Email&lt;/th&gt;&lt;th&gt;Actions&lt;/th&gt;&lt;/tr&gt;
+&lt;?php while($row = mysqli_fetch_assoc($result)): ?&gt;
+&lt;tr&gt;
+  &lt;td&gt;&lt;?= $row['id'] ?&gt;&lt;/td&gt;
+  &lt;td&gt;&lt;?= $row['name'] ?&gt;&lt;/td&gt;
+  &lt;td&gt;&lt;?= $row['email'] ?&gt;&lt;/td&gt;
+  &lt;td&gt;
+    &lt;a href="?delete=&lt;?= $row['id'] ?&gt;"&gt;Delete&lt;/a&gt; |
+    &lt;a href="edit.php?id=&lt;?= $row['id'] ?&gt;"&gt;Edit&lt;/a&gt;
+  &lt;/td&gt;
+&lt;/tr&gt;
+&lt;?php endwhile; ?&gt;
+&lt;/table&gt;
+
+&lt;!-- FILE: edit.php --&gt;
+&lt;!-- (Separate file) --&gt;
+&lt;?php
+session_start();
+include 'db.php';
+$id = (int)$_GET['id'];
+$res = mysqli_query($conn, "SELECT * FROM users WHERE id=$id");
+$row = mysqli_fetch_assoc($res);
+?&gt;
+&lt;form method="POST" action="index.php"&gt;
+  &lt;input type="hidden" name="id" value="&lt;?= $row['id'] ?&gt;"&gt;
+  Name: &lt;input type="text" name="name" value="&lt;?= $row['name'] ?&gt;" required&gt;
+  Email: &lt;input type="email" name="email" value="&lt;?= $row['email'] ?&gt;" required&gt;
+  &lt;button type="submit" name="update"&gt;Update&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;!-- SQL to create table --&gt;
+&lt;!--
+CREATE DATABASE userdb;
+USE userdb;
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL
+);
+--&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+</div>
+
+<!-- Q7 XSLT XML -->
+<div class="code-block">
+<div class="header">Q7 &mdash; XSLT: XML to HTML Table <button onclick="copyCode(this)">Copy</button></div>
+<pre>&lt;!-- FILE: books.xml --&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;?xml-stylesheet type="text/xsl" href="books.xsl"?&gt;
+&lt;books&gt;
+  &lt;book&gt;
+    &lt;title&gt;The Great Gatsby&lt;/title&gt;
+    &lt;author&gt;F. Scott Fitzgerald&lt;/author&gt;
+    &lt;price&gt;299&lt;/price&gt;
+  &lt;/book&gt;
+  &lt;book&gt;
+    &lt;title&gt;1984&lt;/title&gt;
+    &lt;author&gt;George Orwell&lt;/author&gt;
+    &lt;price&gt;199&lt;/price&gt;
+  &lt;/book&gt;
+  &lt;book&gt;
+    &lt;title&gt;To Kill a Mockingbird&lt;/title&gt;
+    &lt;author&gt;Harper Lee&lt;/author&gt;
+    &lt;price&gt;249&lt;/price&gt;
+  &lt;/book&gt;
+&lt;/books&gt;
+
+&lt;!-- FILE: books.xsl --&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
+
+&lt;xsl:template match="/"&gt;
+  &lt;html&gt;
+  &lt;head&gt;&lt;title&gt;Book List&lt;/title&gt;&lt;/head&gt;
+  &lt;body&gt;
+    &lt;h2&gt;Book List&lt;/h2&gt;
+    &lt;table border="1"&gt;
+      &lt;tr&gt;
+        &lt;th&gt;Title&lt;/th&gt;
+        &lt;th&gt;Author&lt;/th&gt;
+        &lt;th&gt;Price (Rs.)&lt;/th&gt;
+      &lt;/tr&gt;
+      &lt;xsl:for-each select="books/book"&gt;
+        &lt;tr&gt;
+          &lt;td&gt;&lt;xsl:value-of select="title"/&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;xsl:value-of select="author"/&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;xsl:value-of select="price"/&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/xsl:for-each&gt;
+    &lt;/table&gt;
+  &lt;/body&gt;
+  &lt;/html&gt;
+&lt;/xsl:template&gt;
+
+&lt;/xsl:stylesheet&gt;</pre>
+</div>
+
+<!-- Q9 Search Filter API -->
+<div class="code-block">
+<div class="header">Q9 &mdash; Search Filter on API Results <button onclick="copyCode(this)">Copy</button></div>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Search Filter&lt;/title&gt;
+  &lt;style&gt;
+    body { font-family: Arial; padding: 20px; }
+    input { padding: 8px; width: 300px; margin-bottom: 15px; }
+    .card { border: 1px solid #ccc; border-radius: 8px; padding: 10px; margin: 8px 0; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h2&gt;User Search&lt;/h2&gt;
+&lt;input type="text" id="search" placeholder="Search by name..." oninput="filterUsers()"&gt;
+&lt;div id="output"&gt;Loading...&lt;/div&gt;
+
+&lt;script&gt;
+let allUsers = [];
+
+fetch("https://jsonplaceholder.typicode.com/users")
+  .then(res =&gt; res.json())
+  .then(data =&gt; {
+    allUsers = data;
+    renderUsers(allUsers);
+  });
+
+function filterUsers() {
+  let query = document.getElementById("search").value.toLowerCase();
+  let filtered = allUsers.filter(u =&gt; u.name.toLowerCase().includes(query));
+  renderUsers(filtered);
+}
+
+function renderUsers(users) {
+  let output = document.getElementById("output");
+  if (users.length === 0) {
+    output.innerHTML = "&lt;p&gt;No users found.&lt;/p&gt;";
+    return;
+  }
+  output.innerHTML = users.map(u =&gt; `
+    &lt;div class="card"&gt;
+      &lt;strong&gt;${u.name}&lt;/strong&gt;&lt;br&gt;
+      Email: ${u.email}&lt;br&gt;
+      City: ${u.address.city}
+    &lt;/div&gt;
+  `).join("");
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
 </div>
 
 <script>
