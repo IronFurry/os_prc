@@ -16,97 +16,198 @@ button{background:#238636;color:white;border:none;padding:5px 10px;border-radius
 </head>
 <body>
 
-
-<!-- 2 Todo -->
+<!-- 1 To-Do List -->
 <div class="code-block">
 <div class="header">To-Do List <button onclick="copyCode(this)">Copy</button></div>
-<pre>&lt;input id="task"&gt;
-&lt;button onclick="addTask()"&gt;Add&lt;/button&gt;
-&lt;ul id="list"&gt;&lt;/ul&gt;
+<pre>&lt;style&gt;
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f4f4;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.container{
+    background:white;
+    padding:20px;
+    width:350px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.2);
+}
+
+h2{
+    text-align:center;
+}
+
+input{
+    width:70%;
+    padding:8px;
+}
+
+button{
+    padding:8px 12px;
+    cursor:pointer;
+}
+
+ul{
+    list-style:none;
+    padding:0;
+}
+
+li{
+    background:#eee;
+    margin-top:10px;
+    padding:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-radius:5px;
+}
+
+.done{
+    text-decoration: line-through;
+    color:green;
+}
+
+.actions button{
+    margin-left:5px;
+}
+&lt;/style&gt;
+
+&lt;div class="container"&gt;
+    &lt;h2&gt;To Do List&lt;/h2&gt;
+
+    &lt;input type="text" id="taskInput" placeholder="Enter task"&gt;
+    &lt;button onclick="addTask()"&gt;Add&lt;/button&gt;
+
+    &lt;ul id="taskList"&gt;&lt;/ul&gt;
+&lt;/div&gt;
+
 &lt;script&gt;
 function addTask(){
- let li=document.createElement("li");
- li.innerText=document.getElementById("task").value;
- li.onclick=()=>li.style.textDecoration="line-through";
- document.getElementById("list").appendChild(li);
+    let input = document.getElementById("taskInput");
+    let text = input.value.trim();
+    if(!text) return;
+
+    let li = document.createElement("li");
+    li.innerHTML = `&lt;span&gt;${text}&lt;/span&gt;
+        &lt;div class="actions"&gt;
+            &lt;button onclick="this.closest('li').querySelector('span').classList.toggle('done')"&gt;Done&lt;/button&gt;
+            &lt;button onclick="this.closest('li').remove()"&gt;Delete&lt;/button&gt;
+        &lt;/div&gt;`;
+    document.getElementById("taskList").appendChild(li);
+    input.value = "";
 }
 &lt;/script&gt;</pre>
 </div>
 
-<!-- 3 DOM Update -->
+<!-- 2 DOM Update -->
 <div class="code-block">
 <div class="header">DOM Update <button onclick="copyCode(this)">Copy</button></div>
 <pre>&lt;p id="text"&gt;Hello&lt;/p&gt;
 &lt;button onclick="change()"&gt;Click&lt;/button&gt;
 &lt;script&gt;
 function change(){
- document.getElementById("text").innerText="Updated";
+    document.getElementById("text").innerText = "Updated";
 }
 &lt;/script&gt;</pre>
 </div>
 
-<!-- 4 jQuery -->
+<!-- 3 jQuery -->
 <div class="code-block">
 <div class="header">jQuery Effects <button onclick="copyCode(this)">Copy</button></div>
-<pre>$(document).ready(function(){
- $("#hide").click(()=>$("p").hide());
- $("#show").click(()=>$("p").show());
- $("#toggle").click(()=>$("p").toggle());
- $("#animate").click(()=>$("div").animate({left:'250px'}));
-});</pre>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;script src="https://code.jquery.com/jquery-3.6.0.min.js"&gt;&lt;/script&gt;
+&lt;style&gt;
+#box{
+    width:200px;
+    height:100px;
+    background:crimson;
+    color:white;
+    text-align:center;
+    line-height:100px;
+    position:relative;
+    margin:auto;
+}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;div id="box"&gt;Hello&lt;/div&gt;
+
+&lt;button id="change"&gt;Change&lt;/button&gt;
+&lt;button id="hide"&gt;Hide&lt;/button&gt;
+&lt;button id="show"&gt;Show&lt;/button&gt;
+&lt;button id="toggle"&gt;Toggle&lt;/button&gt;
+&lt;button id="animate"&gt;Animate&lt;/button&gt;
+
+&lt;script&gt;
+$(document).ready(function(){
+
+    $("#change").click(function(){
+        $("#box").text("Content Changed");
+    });
+
+    $("#hide").click(function(){
+        $("#box").hide();
+    });
+
+    $("#show").click(function(){
+        $("#box").show();
+    });
+
+    $("#toggle").click(function(){
+        $("#box").toggle();
+    });
+
+    $("#animate").click(function(){
+        $("#box").animate({
+            width:"300px",
+            height:"200px",
+            left:"100px"
+        }, 1000);
+    });
+
+});
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</pre>
 </div>
 
-<!-- 5 Weather API -->
+<!-- 4 React -->
 <div class="code-block">
-<div class="header">Weather API <button onclick="copyCode(this)">Copy</button></div>
-<pre>fetch("https://api.openweathermap.org/data/2.5/weather?q=London&appid=YOUR_KEY")
-.then(res=&gt;res.json())
-.then(data=&gt;console.log(data));</pre>
-</div>
+<div class="header">React Counter (Hooks) <button onclick="copyCode(this)">Copy</button></div>
+<pre>import React, { useState } from "react";
 
-<!-- 6 PHP CRUD -->
-<div class="code-block">
-<div class="header">PHP CRUD <button onclick="copyCode(this)">Copy</button></div>
-<pre>&lt;?php
-$conn=mysqli_connect("localhost","root","","test");
-$sql="INSERT INTO users(name) VALUES('Aryan')";
-mysqli_query($conn,$sql);
-?&gt;</pre>
-</div>
+function Counter() {
+    const [count, setCount] = useState(0);
 
-<!-- 7 XML XSLT -->
-<div class="code-block">
-<div class="header">XML XSLT <button onclick="copyCode(this)">Copy</button></div>
-<pre>&lt;books&gt;
- &lt;book&gt;
-  &lt;title&gt;C&lt;/title&gt;
-  &lt;author&gt;ABC&lt;/author&gt;
- &lt;/book&gt;
-&lt;/books&gt;</pre>
-</div>
+    return (
+        &lt;div style={{textAlign:"center", marginTop:"40px"}}&gt;
+            &lt;h2&gt;Counter App&lt;/h2&gt;
+            &lt;h3&gt;{count}&lt;/h3&gt;
 
-<!-- 8 React -->
-<div class="code-block">
-<div class="header">React Counter <button onclick="copyCode(this)">Copy</button></div>
-<pre>const [count,setCount]=useState(0);
-return &lt;button onClick={()=&gt;setCount(count+1)}&gt;{count}&lt;/button&gt;;</pre>
-</div>
+            &lt;button onClick={() =&gt; setCount(count + 1)}&gt;+&lt;/button&gt;
+            &lt;button onClick={() =&gt; setCount(count - 1)} style={{marginLeft:"10px"}}&gt;-&lt;/button&gt;
+            &lt;button onClick={() =&gt; setCount(0)} style={{marginLeft:"10px"}}&gt;Reset&lt;/button&gt;
+        &lt;/div&gt;
+    );
+}
 
-<!-- 9 Search -->
-<div class="code-block">
-<div class="header">Search Filter <button onclick="copyCode(this)">Copy</button></div>
-<pre>function search(){
- let val=document.getElementById("search").value;
- console.log(val);
-}</pre>
+export default Counter;</pre>
 </div>
 
 <script>
 function copyCode(btn){
- const code = btn.parentElement.nextElementSibling.innerText;
- navigator.clipboard.writeText(code);
- btn.innerText="Copied!";
- setTimeout(()=>btn.innerText="Copy",2000);
+    const code = btn.parentElement.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code);
+    btn.innerText = "Copied!";
+    setTimeout(() => btn.innerText = "Copy", 2000);
 }
 </script>
 
